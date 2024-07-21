@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# URL of the application to check
+APP_URL="here oes my url"
+
+# Log file
+LOGFILE="app_health.log"
+
+# Function to check application status
+check_app_status() {
+    STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" $APP_URL)
+
+    if [ $STATUS_CODE -eq 200 ]; then
+        echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] Application is UP (HTTP $STATUS_CODE)" >> $LOGFILE
+        echo "Application is UP"
+    else
+        echo "$(date '+%Y-%m-%d %H:%M:%S') [ERROR] Application is DOWN (HTTP $STATUS_CODE)" >> $LOGFILE
+        echo "Application is DOWN"
+    fi
+}
+
+# Main function
+main() {
+    echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] Checking application status..." >> $LOGFILE
+    check_app_status
+}
+
+main
